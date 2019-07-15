@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 use Aws\S3\S3Client;
 
@@ -14,6 +15,7 @@ use App\Entity\Volume;
 use App\Entity\Image;
 use App\Entity\Issue;
 use App\Entity\Article;
+use App\Entity\TimelineEvent;
 
 /**
  * @Route("/archive")
@@ -88,7 +90,7 @@ class ArchiveController extends AbstractController
         $issues = $entityManager->getRepository(Issue::class)->getIssuesByYear($year);
 
         if ($year < self::START_YEAR || $year > (date('Y'))) {
-            return $this->createNotFoundException('No matching year found.');
+            throw $this->createNotFoundException('No matching year found.');
         }
 
         return $this->render('archive/year.html.twig', [
@@ -136,6 +138,38 @@ class ArchiveController extends AbstractController
                 ),
                 'image' => 'https://archive.org/services/img/' . $issue->getArchiveKey()
             ]
+        ]);
+    }
+
+    /**
+     * @Route("/timeline-data-source", name="timeline_data_source")
+     */
+    public function timelineDataSource(Request $request)
+    {
+        $startDate = new \DateTime($request->get('start_date', date('Y-m-d', strtotime('January 1, 1928'))));
+        $endDate = new \DateTime($request->get('end_date', date('Y-m-d')));
+        $output = [];
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        // Newspaper Issues
+        $issueRepository = $entityManager->getRepository(Issue::class);
+        $issues = $issueRepository->findBetween($startDate, $endDate);
+        foreach ($issues as $issue) {
+            $output[] = $issue->getAsTimelineEventArray($this->generateUrl('issue', [
+                'issueDate' => $issue->getIssueDate()->format('Y-m-d')
+            ]));
+        }
+
+        // Timeline Events
+        $eventRepository = $entityManager->getRepository(TimelineEvent::class);
+        $events = $eventRepository->findBetween($startDate, $endDate);
+        foreach ($events as $event) {
+            $output[] = $event->getAsTimelineEventArray();
+        }
+
+        return $this->json([
+            'events' => $output
         ]);
     }
 

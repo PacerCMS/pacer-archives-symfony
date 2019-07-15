@@ -60,4 +60,18 @@ class IssueRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findBetween(\DateTime $startDate, \DateTime $endDate)
+    {
+        return $this->createQueryBuilder('i')
+            ->leftJoin('i.volume', 'v')
+            ->addSelect('v')
+            ->where('i.issueDate >= :start')
+            ->andWhere('i.issueDate <= :end')
+            ->setParameter('start', $startDate)
+            ->setParameter('end', $endDate)
+            ->orderBy('i.issueDate', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

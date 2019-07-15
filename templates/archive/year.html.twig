@@ -2,6 +2,11 @@
 
 {% block title %}Issues Published in {{ year }} - {{ parent() }}{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+{% endblock %}
+
 {% block body %}
 <div class="container mt-3">
   <nav aria-label="breadcrumb">
@@ -37,6 +42,15 @@
   </div>
 
   {% if issues|length > 0 %}
+
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="embed-responsive">
+        <div id="timeline" class="embed-responsive-item"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="calendar-container mb-4">
     <div class="row">
       <div class="col-lg-3"><div class="text-center calendar calendar-january"></div></div>
@@ -77,7 +91,20 @@
 
 {% block javascripts %}
 {{ parent() }}
+<script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
 <script>
+  // Timeline Element
+  $('#timeline').ready(function () {
+    $.getJSON("{{ path('timeline_data_source') }}", {
+      start_date: "{{ year }}-01-01",
+      end_date: "{{ year }}-12-31"
+    }, function (timeline_json) {
+      $('#timeline').empty().css({height: '600px'});
+      window.timeline = new TL.Timeline('timeline', timeline_json);  
+    })
+  })
+
+  // Calendar Elements
   var volumeIssues = []
   {% for issue in issues %}
   volumeIssues.push({

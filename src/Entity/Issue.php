@@ -139,6 +139,17 @@ class Issue
 
     /* model methods */
 
+    public function getPublicationName()
+    {
+        switch ($this->volume->getNameplateKey()) {
+            case 'volette':
+                return 'The Volette';
+                break;
+            default:
+                return 'The Pacer';
+        }
+    }
+
     public function __toString()
     {
         return $this->issueDate->format('F j, Y');
@@ -173,5 +184,41 @@ class Issue
         }
 
         return $this;
+    }
+
+    /* Model Methods */
+
+    public function getAsTimelineEventArray(string $link): array
+    {
+        return [
+            'group' => 'Newspaper Issues',
+            'text' => [
+                'headline' => sprintf(
+                    '%s (Issue %s, Volume %s)',
+                    $this->getPublicationName(),
+                    $this->getIssueNumber() ? $this->getIssueNumber() : 'N/A',
+                    $this->getVolume()->getVolumeNumber()
+                ),
+                'text' => sprintf(
+                    'Published %s. %d pages. %s',
+                    $this->getIssueDate()->format('F j, Y'),
+                    $this->getPageCount(),
+                    $this->getArchiveNotes()
+                )
+            ],
+            'start_date' => [
+                'year' => (string) $this->getIssueDate()->format('Y'),
+                'month' => (string) $this->getIssueDate()->format('m'),
+                'day' => (string) $this->getIssueDate()->format('d')
+            ],
+            'media' => [
+                'thumbnail' => 'https://archive.org/services/img/' . $this->getArchiveKey(),
+                'url' => 'https://archive.org/services/img/' . $this->getArchiveKey(),
+                'alt' => 'Issue cover page.',
+                'credit' => 'TSLA / UT Martin Library',
+                'link' => $link,
+                'link_target' => '_self'
+            ]
+        ];
     }
 }

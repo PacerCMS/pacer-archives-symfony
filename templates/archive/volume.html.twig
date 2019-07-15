@@ -2,6 +2,11 @@
 
 {% block title %}Volume {{volume.volumeNumber}} ({{ volume.volumeStartDate|date('Y')}}-{{ volume.volumeEndDate|date('Y') }}) - {{ parent() }}{% endblock %}
 
+{% block stylesheets %}
+{{ parent() }}
+<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+{% endblock %}
+
 {% block body %}
 <div class="container mt-3">
   <nav aria-label="breadcrumb">
@@ -40,6 +45,15 @@
   </div>
 
   {% if volume.issues.count > 0 %}
+
+  <div class="row mb-5">
+    <div class="col-12">
+      <div class="embed-responsive">
+        <div id="timeline" class="embed-responsive-item"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="calendar-container mb-4">
     <div class="row">
       <div class="col-lg-3"><div class="text-center calendar calendar-august"></div></div>
@@ -88,7 +102,18 @@
 
 {% block javascripts %}
 {{ parent() }}
+<script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
 <script>
+  // Timeline Element
+  $.getJSON("{{ path('timeline_data_source') }}", {
+    start_date: "{{ volume.volumeStartDate.format('Y-m-d') }}",
+    end_date: "{{ volume.volumeEndDate.format('Y-m-d') }}"
+  }, function (timeline_json) {
+    $('#timeline').css({height: '600px'});
+    window.timeline = new TL.Timeline('timeline', timeline_json);  
+  });
+
+  // Calendar Element
   var volumeIssues = []
   {% for issue in volume.issues %}
   volumeIssues.push({
