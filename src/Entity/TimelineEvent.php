@@ -263,10 +263,12 @@ class TimelineEvent
      * Model Methods
      */
 
-    public function getAsTimelineEventArray()
+    public function getAsTimelineEventArray(): array
     {
+        $record = [];
+
         // Start date (required)
-        $record = ['start_date' => []];
+        $record['start_date'] = [];
         switch ($this->getStartDatePrecision()) {
             case 'minute':
                 $record['start_date']['minute'] = $this->getStartDate()->format('i');
@@ -288,7 +290,7 @@ class TimelineEvent
 
         // End date (optional)
         if ($this->getEndDate() && $this->getEndDatePrecision()) {
-            $record = ['end_date' => []];
+            $record['end_date'] = [];
             switch ($this->getEndDatePrecision()) {
                 case 'minute':
                     $record['end_date']['minute'] = $this->getEndDate()->format('i');
@@ -314,6 +316,15 @@ class TimelineEvent
             'headline' => $this->getHeadline(),
             'text' => $this->getText(),
         ];
+
+        // Media
+        if ($this->getMedia()) {
+            $record['media'] = [
+                'url' => $this->getMedia(),
+                'caption' => $this->getMediaCaption(),
+                'credit' => $this->getMediaCredit()
+            ];
+        }
 
         // Event grouping
         $record['group'] = $this->getEventGroup();

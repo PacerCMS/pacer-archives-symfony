@@ -48,6 +48,7 @@ sonata_admin:
                     - app.admin.issue
                     - app.admin.article
                     - app.admin.image
+                    - app.admin.timeline_event
 
 sonata_block:
     blocks:
@@ -87,3 +88,9 @@ services:
             - [setTemplate, ['show', 'admin/image/show.html.twig']]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Images }
+
+    app.admin.timeline_event:
+        class: App\Admin\TimelineEventAdmin
+        arguments: [~, App\Entity\TimelineEvent, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Timeline Events }
