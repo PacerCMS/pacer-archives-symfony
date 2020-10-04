@@ -1,0 +1,14 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}New Issue - {{ parent() }}{% endblock %}
+
+{% block body %}
+  {% embed 'admin/_page_header.html.twig' %}
+  {% block page_header_title %}New Issue{% endblock %}
+  {% block page_header_buttons %}
+  <a href="{{ path('article_issue') }}"><i class="fas fa-list fa-fw"></i></a>
+  {% endblock %}
+  {% endembed %}
+
+  {{ include('admin/issue/_form.html.twig') }}
+{% endblock %}

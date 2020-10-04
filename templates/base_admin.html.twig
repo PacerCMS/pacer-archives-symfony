@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}[Admin] The Pacer{% endblock %}</title>
+    {% block stylesheets -%}
+    {{ encore_entry_link_tags('admin') }}
+    {% endblock %}
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+      <a class="navbar-brand" href="{{ path('admin_home') }}">Site Admin</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Archive Content
+            </a>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="{{ path('volume_index') }}">Volumes</a>
+              <a class="dropdown-item" href="{{ path('issue_index') }}">Issues</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{{ path('article_index') }}">Articles</a>
+              <a class="dropdown-item" href="{{ path('image_index') }}">Images</a>
+            </div>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item"><a href="{{ path('app_logout') }}">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div id="content" tabindex="-1">
+    {% block body %}{% endblock %}
+    </div>
+
+    <footer class="text-center p-5">
+      <a href="{{ path('home') }}">Back to Website</a>
+    </footer>
+
+    {% block javascripts %}
+    <script src="https://kit.fontawesome.com/09b66f5b11.js" crossorigin="anonymous"></script>
+    {{ encore_entry_script_tags('admin') }}
+    {% endblock %}
+    {% block pagejs %}
+    {% endblock %}
+  </body>
+</html>

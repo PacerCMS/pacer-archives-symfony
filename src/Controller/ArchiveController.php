@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Aws\S3\S3Client;
 
-use App\Entity\Volume;
-use App\Entity\Image;
-use App\Entity\Issue;
-use App\Entity\Article;
+use App\Repository\ArticleRepository;
+use App\Repository\ImageRepository;
+use App\Repository\IssueRepository;
+use App\Repository\VolumeRepository;
 use App\Entity\TimelineEvent;
 
 /**
@@ -28,11 +28,10 @@ class ArchiveController extends AbstractController
     /**
      * @Route("/", name="archive")
      */
-    public function index()
+    public function index(IssueRepository $issueRepository, VolumeRepository $volumeRepository)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $volumes = $entityManager->getRepository(Volume::class)->findAllCurrentVolumes();
-        $issues = $entityManager->getRepository(Issue::class)->findAll();
+        $volumes = $volumeRepository->findAllCurrentVolumes();
+        $issues = $issueRepository->findAll();
 
         $years = range(self::START_YEAR, date('Y'));
         $issue_counts_by_year = [];
@@ -57,17 +56,16 @@ class ArchiveController extends AbstractController
     /**
      * @Route("/volume/{volumeNumber}", name="volume", requirements={"volumeNumber"="\d+"})
      */
-    public function volume(int $volumeNumber)
+    public function volume(VolumeRepository $volumeRepository, int $volumeNumber)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $volume = $entityManager->getRepository(Volume::class)->findOneBy(['volumeNumber' => $volumeNumber]);
+        $volume = $volumeRepository->findOneBy(['volumeNumber' => $volumeNumber]);
 
         if (!$volume) {
             throw $this->createNotFoundException('No matching volume found.');
         }
 
-        $previousVolume = $entityManager->getRepository(Volume::class)->findPreviousVolume($volume);
-        $nextVolume = $entityManager->getRepository(Volume::class)->findNextVolume($volume);
+        $previousVolume = $volumeRepository->findPreviousVolume($volume);
+        $nextVolume = $volumeRepository->findNextVolume($volume);
 
         return $this->render('archive/volume.html.twig', [
             'volume' => $volume,
@@ -84,10 +82,9 @@ class ArchiveController extends AbstractController
     /**
      * @Route("/year/{year}", name="year", requirements={"year"="[1|2][0|9][0-9][0-9]"})
      */
-    public function year(int $year)
+    public function year(IssueRepository $issueRepository, int $year)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $issues = $entityManager->getRepository(Issue::class)->getIssuesByYear($year);
+        $issues = $issueRepository->getIssuesByYear($year);
 
         if ($year < self::START_YEAR || $year > (date('Y'))) {
             throw $this->createNotFoundException('No matching year found.');
@@ -95,12 +92,15 @@ class ArchiveController extends AbstractController
 
         return $this->render('archive/year.html.twig', [
             'issues' => $issues,
+            'hasUTMDigitalArchives' => (bool) count(array_filter($issues, function ($issue) {
+                return (bool) $issue->getUtmDigitalArchiveUrl();
+            })),
             'year' => $year,
             'previousYear' => ($year > self::START_YEAR) ? $year - 1 : false,
             'nextYear' => ($year < (int) date('Y')) ? $year + 1 : false,
             'opengraph' => [
                 'title' => 'The Pacer - ' . $year,
-                'description' => 'Issues of The Pacer from ' . $year . '.'
+                'description' => 'Issues of The Volette and The Pacer from ' . $year . '.'
             ]
         ]);
     }
@@ -109,17 +109,16 @@ class ArchiveController extends AbstractController
      * @Route("/issue/{issueDate}", name="issue", requirements={"issueDate"="([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])"})
      * @Route("/issue-{issueDate}", requirements={"issueDate"="([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])"})
      */
-    public function issue(string $issueDate)
+    public function issue(IssueRepository $issueRepository, string $issueDate)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $issue = $entityManager->getRepository(Issue::class)->findOneBy(['issueDate' => new \DateTime($issueDate)]);
+        $issue = $issueRepository->findOneBy(['issueDate' => new \DateTime($issueDate)]);
 
         if (!$issue) {
             throw $this->createNotFoundException('No matching issue found.');
         }
 
-        $previousIssue = $entityManager->getRepository(Issue::class)->findPreviousIssue($issue);
-        $nextIssue = $entityManager->getRepository(Issue::class)->findNextIssue($issue);
+        $previousIssue = $issueRepository->findPreviousIssue($issue);
+        $nextIssue = $issueRepository->findNextIssue($issue);
 
         return $this->render('archive/issue.html.twig', [
             'issue' => $issue,
@@ -176,10 +175,9 @@ class ArchiveController extends AbstractController
     /**
      * @Route("/article/{slug}/{id}", name="article", requirements={"id"="\d+"})
      */
-    public function article(string $slug, int $id)
+    public function article(ArticleRepository $articleRepository, string $slug, int $id)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $article = $entityManager->getRepository(Article::class)->find($id);
+        $article = $articleRepository->find($id);
 
         if (!$article) {
             throw $this->createNotFoundException('No matching article found.');
@@ -236,10 +234,9 @@ class ArchiveController extends AbstractController
      *
      * @Route("/image/{id}", name="s3_proxy", requirements={"id"="\d+"})
      */
-    public function s3Proxy(S3Client $s3Client, $id)
+    public function s3Proxy(ImageRepository $imageRepository, S3Client $s3Client, $id)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $image = $entityManager->getRepository(Image::class)->find($id);
+        $image = $imageRepository->find($id);
 
         if (!$image) {
             throw $this->createNotFoundException('No matching image found.');
@@ -269,10 +266,9 @@ class ArchiveController extends AbstractController
     /**
      * @Route("/legacy-issue/{issueDate}", name="legacy_issue", requirements={"issueDate"="([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])"})
      */
-    public function legacyIssue(string $issueDate)
+    public function legacyIssue(IssueRepository $issueRepository, string $issueDate)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $issue = $entityManager->getRepository(Issue::class)->findOneBy(['issueDate' => new \DateTime($issueDate)]);
+        $issue = $issueRepository->findOneBy(['issueDate' => new \DateTime($issueDate)]);
 
         if (!$issue) {
             throw $this->createNotFoundException('Could not locate legacy issue.');
@@ -289,10 +285,9 @@ class ArchiveController extends AbstractController
      *
      * @Route("/legacy-article/{id}", name="legacy_article", requirements={"id"="\d+"})
      */
-    public function legacyArticle(int $id)
+    public function legacyArticle(ArticleRepository $articleRepository, int $id)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $article = $entityManager->getRepository(Article::class)->findOneBy(['legacyId' => $id]);
+        $article = $articleRepository->findOneBy(['legacyId' => $id]);
 
         if (!$article) {
             throw $this->createNotFoundException('Could not locate legacy article.');

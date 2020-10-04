@@ -1,59 +1,41 @@
-{% extends base_template %}
+{% extends 'base_admin.html.twig' %}
 
-{% block title %}
-    {{ "title_show"|trans({'%name%': admin.toString(object)|truncate(15) }, 'SonataAdminBundle') }}
-{% endblock %}
+{% block title %}{{ volume }} - {{ parent() }}{% endblock %}
 
-{% block navbar_title %}
-    {{ block('title') }}
-{% endblock %}
-
-{%- block actions -%}
-    {% include '@SonataAdmin/CRUD/action_buttons.html.twig' %}
-{%- endblock -%}
-
-{% block show %}
-<div class="sonata-ba-view">
-  <div class="panel panel-default">
-    <div class="panel-heading">Volume</div>
-    <div class="panel-body">
+{% block body %}
+<div class="container">
+  {% embed 'admin/_page_header.html.twig' %}
+  {% block page_header_title %}{{ volume }}{% endblock %}
+  {% block page_header_buttons %}
+  <a href="{{ path('volume_index') }}"><i class="fas fa-list fa-fw"></i></a>
+  <a href="{{ path('volume_edit', {'id': volume.id}) }}"><i class="fas fa-edit fa-fw"></i></a>
+  {% endblock %}
+  {% endembed %}
+  <div class="card mb-3">
+    <div class="card-body">
       <table class="table">
         <tbody>
             <tr>
-                <th>ID</th>
-                <td>{{ object.id }}</td>
-            </tr>
-            <tr>
-                <th>Volume Number</th>
-                <td>{{ object.volumeNumber }}</td>
-            </tr>
-            <tr>
-                <th>Start Date</th>
-                <td>{{ object.volumeStartDate ? object.volumeStartDate|date('Y-m-d') : '' }}</td>
+                <th>Volume</th>
+                <td>{{ volume.volumeNumber }}</td>
             </tr>
             <tr>
                 <th>End Date</th>
-                <td>{{ object.volumeEndDate ? object.volumeEndDate|date('Y-m-d') : '' }}</td>
+                <td>{{ volume.volumeStartDate ? volume.volumeStartDate|date('n/j/Y') : '' }}</td>
             </tr>
             <tr>
-                <th>Nameplate Key</th>
-                <td>{{ object.nameplateKey }}</td>
+                <th>End Date</th>
+                <td>{{ volume.volumeEndDate ? volume.volumeEndDate|date('n/j/Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nameplate</th>
+                <td>{{ volume.nameplateKey }}</td>
             </tr>
         </tbody>
       </table>
+    </div>
   </div>
-</div>
 
-{% if object.issues.count %}
-<div class="panel panel-default">
-  <div class="panel-heading">Issues</div>
-  <div class="panel-body">
-    <ul>
-      {% for issue in object.issues %}
-      <li><a href="{{ path('admin_app_issue_edit', {'id': issue.id}) }}">{{ issue }}</a></li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-  </div>
+  {{ include('admin/volume/_delete_form.html.twig') }}
 </div>
 {% endblock %}

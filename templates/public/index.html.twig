@@ -10,8 +10,8 @@
     <div class="col-lg-8">
       <div class="rounded p-3" style="background: rgba(255,255,255,0.97);">
         <h1 class="display-4 font-italic">Setting the Pace</h1>
-        <p class="lead"><em>The Pacer</em> is the student newspaper at the University of Tennessee at Martin. First printed as <em>The Volette</em> in 1928, the newspaper has been the voice of the student body through through almost all of UT Martin's history.</p>
-        <p class="lead">Through its time as the University of Tennessee Junior College, its ascendance to a four-year degree granting instutution as the University of Tennessee Martin Branch and through today, <em>The Pacer</em> is our eyes to the history of the campus we call home.</p>
+        <p class="lead"><em>The Pacer</em> is the student newspaper at the University of Tennessee at Martin. First printed as <em>The Volette</em> in 1928, the newspaper has been the voice of the student body throughout almost all of UT Martin's history.</p>
+        <p class="lead">From its time as the University of Tennessee Junior College, its ascendance to a four-year degree granting instutution as the University of Tennessee Martin Branch and today, <em>The Pacer</em> is our eyes to the history of the campus we call home.</p>
         <p class="lead mb-0"><a href="{{ path('about') }}" class="text-dark font-weight-bold">Continue reading...</a></p>
       </div>
     </div>
@@ -19,69 +19,68 @@
 </div>
 
 <main role="main" class="container">
-<div class="row">
-<div class="col-md-8 blog-main">
+  <div class="row">
+    <div class="col-md-8 blog-main">
 
-  <div class="card border-light bg-light mb-3">
-    <div class="card-body">
-      <div class="float-right d-none d-sm-block">
-        <a href="{{ path('archive') }}"><img src="{{ asset('assets/images/noun-project/newspaper.svg') }}" alt="Newspaper Icon"/></a>
+      <div class="card border-light bg-light mb-3">
+        <div class="card-body">
+          <div class="ml-5 my-3 float-right d-none d-sm-block">
+            <a href="{{ path('archive') }}"><i class="fas fa-newspaper fa-fw fa-6x text-secondary"></i></a>
+          </div>
+          <h3><a href="{{ path('archive') }}">The Archives</a></h3>
+          <p>We have collected {{ issue_count|number_format }} issues of <em>The Volette</em> and <em>The Pacer</em> and are continuing to expand the archives.</p>
+          <div>
+            <a href="{{ path('archive') }}" class="btn btn-dark">Browse the Archives</a>
+          </div>
+        </div>
       </div>
-      <h3><a href="{{ path('archive') }}">The Archives</a></h3>
-      <p>We have collected {{ issue_count|number_format }} issues of <em>The Volette</em> and <em>The Pacer</em> and are continuing to expand the archives.</p>
-      <div>
-        <a href="{{ path('archive') }}" class="btn btn-dark">Browse the Archives</a>
+
+      <div class="card border-light bg-light mb-3">
+        <div class="card-body">
+          <div class="ml-5 my-3 float-right d-none d-sm-block">
+            <a href="{{ path('missing_issues') }}"><i class="fas fa-search fa-fw fa-6x text-secondary"></i></a>
+          </div>
+          <h3><a href="{{ path('missing_issues') }}">Missing Issues</a></h3>
+          <p>Help us locate print copies of these issues so we can make them available online.</p>
+          <div>
+            <a href="{{ path('missing_issues') }}" class="btn btn-dark">See Missing Issues</a>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <div class="card border-light bg-light mb-3">
+        <div class="card-body">
+          <div class="ml-5 my-3 float-right d-none d-sm-block">
+            <a href="{{ path('donate') }}" target="_blank"><i class="fas fa-hands-helping fa-fw fa-6x text-secondary"></i></a>
+          </div>
+          <h3><a href="{{ path('donate') }}" target="_blank">Support <em>The Pacer</em></a></h3>
+          <p>Your support funds scholarships, equipment and educational opportunities.</p>
+          <div>
+            <a href="{{ path('donate') }}" target="_blank" class="btn btn-secondary btn-dark">Donate Today</a>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.blog-main -->
+
+    <aside class="col-md-4 blog-sidebar">
+      <div class="card mb-3">
+        <div class="card-header">
+          <h5 class="mb-0"><a href="http://www.thepacer.net/" class="text-dark">Latest from <br /><em>The Pacer Online Edition</em></a></h3>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            {% for item in feed %}
+              <li class="mb-2">
+                <a href="{{ item.link }}" target="_blank">{{ item.title.rendered | raw }}</a><br />
+                <span class="text-muted small">{{ item._embedded.author | first.name }} / {{ item.date | date('F j, Y') }}</span>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </aside>
+
   </div>
-
-  <div class="card border-light bg-light mb-3">
-    <div class="card-body">
-      <div class="float-right d-none d-sm-block">
-        <a href="{{ path('missing_issues') }}"><img src="{{ asset('assets/images/noun-project/browse.svg') }}" alt="Browse Icon"/></a>
-      </div>
-      <h3><a href="{{ path('missing_issues') }}">Missing Issues</a></h3>
-      <p>Help us locate print copies of these issues so we can make them available online.</p>
-      <div>
-        <a href="{{ path('missing_issues') }}" class="btn btn-dark">See Missing Issues</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="card border-light bg-light mb-3">
-    <div class="card-body">
-      <div class="float-right d-none d-sm-block">
-        <a href="{{ path('donate') }}"><img src="{{ asset('assets/images/noun-project/harmonious.svg') }}" alt="Harmonious Icon"/></a>
-      </div>
-      <h3><a href="{{ path('donate') }}">Support <em>The Pacer</em></a></h3>
-      <p>Your support funds scholarships, equipment and educational opportunities.</p>
-      <div>
-        <a href="{{ path('donate') }}" class="btn btn-secondary btn-dark">Donate Today</a>
-      </div>
-    </div>
-  </div>
-</div><!-- /.blog-main -->
-
-<aside class="col-md-4 blog-sidebar">
-  <div class="card mb-3">
-    <div class="card-header">
-      <h5 class="mb-0"><a href="http://www.thepacer.net/" class="text-dark">Latest from <br /><em>The Pacer Online Edition</em></a></h3>
-    </div>
-    <div class="card-body">
-      <ul class="list-unstyled">
-        {% for item in feed %}
-          <li class="mb-2">
-            <a href="{{ item.link }}" target="_blank">{{ item.title.rendered | raw }}</a><br />
-            <span class="text-muted small">{{ item._embedded.author | first.name }} / {{ item.date | date('F j, Y') }}</span>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-</aside>
-
-</div>
-
 </main>
 
 {% endblock %}

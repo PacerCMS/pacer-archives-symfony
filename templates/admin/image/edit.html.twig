@@ -1,0 +1,17 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Edit {{ image }} - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="container">
+  {% embed 'admin/_page_header.html.twig' %}
+  {% block page_header_title %}Edit {{ image }}{% endblock %}
+  {% block page_header_buttons %}
+  <a href="{{ path('image_index') }}"><i class="fas fa-list fa-fw"></i></a>
+  {% endblock %}
+  {% endembed %}
+
+  {{ include('admin/image/_form.html.twig', {'button_label': 'Update'}) }}
+  {{ include('admin/image/_delete_form.html.twig') }}
+</div>
+{% endblock %}

@@ -54,6 +54,11 @@ class Issue
      */
     private $articles;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     */
+    private $utmDigitalArchiveUrl;
+
     public function __construct()
     {
         $this->issueDate = new \DateTime();
@@ -182,6 +187,18 @@ class Issue
                 $article->setIssue(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUtmDigitalArchiveUrl(): ?string
+    {
+        return $this->utmDigitalArchiveUrl;
+    }
+
+    public function setUtmDigitalArchiveUrl(?string $utmDigitalArchiveUrl): self
+    {
+        $this->utmDigitalArchiveUrl = $utmDigitalArchiveUrl;
 
         return $this;
     }

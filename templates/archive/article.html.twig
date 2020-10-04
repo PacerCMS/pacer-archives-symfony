@@ -72,12 +72,4 @@
   </div>
 </div>
 
-{% if is_granted('ROLE_ADMIN') %}
-<div class="fixed-top">
-  <div class="float-right p-1">
-    <a href="{{ path('admin_app_article_edit', {id: article.id}) }}" class="btn btn-secondary btn-sm"><i class="fas fa-pencil-alt"></i> Edit</a>
-  </div>
-</div>
-{% endif %}
-
 {% endblock %}

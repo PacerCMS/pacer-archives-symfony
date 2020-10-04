@@ -52,9 +52,9 @@
         <tr class="{% if volume.issues.count == 0 %}text-muted{% endif %}">
           <td class="text-center align-middle d-none d-lg-table-cell">
             {% if volume.issues.count > 0 %}
-            <a href="{{ path('volume', { volumeNumber: volume.volumeNumber } )}}"><img src="https://archive.org/services/img/{{ volume.coverIssue.archiveKey }}" alt="Cover" title="{{ volume.coverIssue.archiveKey }}" height="125" class=""></a>
+            <a href="{{ path('volume', { volumeNumber: volume.volumeNumber } )}}"><img src="https://archive.org/services/img/{{ volume.coverIssue.archiveKey }}" alt="Cover" title="{{ volume.coverIssue.archiveKey }}" height="125"></a>
             {% else %}
-            &nbsp;
+            <a href="{{ path('volume', { volumeNumber: volume.volumeNumber } )}}"><img src="{{ asset('build/missing-issue.svg') }}" alt="No issues availabe yet." title="{{ volume.coverIssue.archiveKey }}" height="125"></a>
             {% endif %}
           </td>
           <td class="align-middle">
@@ -71,7 +71,7 @@
             {% if volume.issues.count %}
             <a href="{{ path('volume', { volumeNumber: volume.volumeNumber } )}}">{{ pluralize(volume.issues.count, '<strong>1</strong> issue', '<strong>%d</strong> issues') | raw }}</a>
             {% else %}
-            <span class="text-center text-muted">No issues available</span>
+            <span class="text-center text-muted">No issues available yet.</span>
             {% endif %}
           </td>
         </tr>
@@ -88,18 +88,20 @@
         <div class="card mb-2 {% if volume.issues.count == 0 %}text-muted{% endif %}">
           <div class="card-body" style="min-height:15rem;">
             <div class="row">
-              {% if volume.issues.count > 0 %}
               <div class="col-5">
+                {% if volume.issues.count > 0 %}
                 <a href="{{ path('volume', { volumeNumber: volume.volumeNumber } )}}" class="d-block" style="min-height:100px;"><img src="https://archive.org/services/img/{{ volume.coverIssue.archiveKey }}" alt="{{ volume.coverIssue.archiveKey }}" class="img-fluid"></a>
+                {% else %}
+                <a href="{{ path('volume', { volumeNumber: volume.volumeNumber } )}}" class="d-block" style="min-height:100px;"><img src="{{ asset('build/missing-issue.svg') }}" alt="No issues available yet." class="img-fluid"></a>
+                {% endif %}
               </div>
-              {% endif %}
               <div class="col-7">
                 <p class="small">
                   {% if volume.nameplateKey == 'volette' %}<em>The Volette</em>{% endif %}
                   {% if volume.nameplateKey == 'pacer' %}<em>The Pacer</em>{% endif %}
                 </p>
                 <h5 class="mt-2"><a href="{{ path('volume', { volumeNumber: volume.volumeNumber } )}}">Volume {{volume.volumeNumber}} ({{ volume.volumeStartDate | date('Y')}}-{{ volume.volumeEndDate | date('Y') }})</a></h5>
-                <p>{{ pluralize(volume.issues.count, '1 issue', '%d issues', 'No issues available') }}</p>
+                <p>{{ pluralize(volume.issues.count, '1 issue', '%d issues', 'No issues available yet.') }}</p>
               </div>
             </div>
           </div>

@@ -1,108 +1,90 @@
-{% extends base_template %}
+{% extends 'base_admin.html.twig' %}
 
-{% block title %}
-    {{ "title_show"|trans({'%name%': admin.toString(object)|truncate(15) }, 'SonataAdminBundle') }}
-{% endblock %}
+{% block title %}{{ article }} - {{ parent() }}{% endblock %}
 
-{% block navbar_title %}
-    {{ block('title') }}
-{% endblock %}
+{% block body %}
+<div class="container">
+  {% embed 'admin/_page_header.html.twig' %}
+  {% block page_header_title %}{{ article }}{% endblock %}
+  {% block page_header_buttons %}
+  <a href="{{ path('article_index') }}"><i class="fas fa-list fa-fw"></i></a>
+  <a href="{{ path('article_edit', {'id': article.id}) }}"><i class="fas fa-edit fa-fw"></i></a>
+  {% endblock %}
+  {% endembed %}
 
-{%- block actions -%}
-    {% include '@SonataAdmin/CRUD/action_buttons.html.twig' %}
-{%- endblock -%}
-
-{% block show %}
-<div class="sonata-ba-view">
-  <div class="panel panel-default">
-    <div class="panel-heading">Article</div>
-    <div class="panel-body">
+  <div class="card mb-3">
+    <div class="card-body">
       <table class="table">
-          <tbody>
-              <tr>
-                  <th>ID</th>
-                  <td>{{ object.id }}</td>
-              </tr>
-              <tr>
-                  <th>Issue</th>
-                  {% if object.issue %}
-                  <td><a href="{{ path('admin_app_issue_edit', {id: object.issue.id} ) }}">{{ object.issue }}</a></td>
-                  {% else %}
-                  <td class="text-muted">No paired issue.</th>
-                  {% endif %}
-              </tr>
-              <tr>
-                  <th>Headline</th>
-                  <td>{{ object.headline }}</td>
-              </tr>
-              <tr>
-                  <th>Subheadline / Alternative Headline</th>
-                  <td>{{ object.alternativeHeadline }}</td>
-              </tr>
-              <tr>
-                  <th>Author Byline</th>
-                  <td>{{ object.authorByline }}</td>
-              </tr>
-              <tr>
-                  <th>Co-author / Contributor Byline</th>
-                  <td>{{ object.contributorByline }}</td>
-              </tr>
-              <tr>
-                  <th>Body</th>
-                  <td>{{ object.articleBody | markdown }}</td>
-              </tr>
-              <tr>
-                  <th>Created</th>
-                  <td>{{ object.dateCreated ? object.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
-              </tr>
-              <tr>
-                  <th>Published</th>
-                  <td>{{ object.datePublished ? object.datePublished|date('Y-m-d H:i:s') : '' }}</td>
-              </tr>
-              <tr>
-                  <th>Modified</th>
-                  <td>{{ object.dateModified ? object.dateModified|date('Y-m-d H:i:s') : '' }}</td>
-              </tr>
-              <tr>
-                  <th>Keywords</th>
-                  <td>{{ object.keywords }}</td>
-              </tr>
-              <tr>
-                  <th>Legacy CMS ID</th>
-                  <td>{{ object.legacyId }}</td>
-              </tr>
-              <tr>
-                  <th>Slug</th>
-                  <td><tt>{{ object.slug }}</tt></td>
-              </tr>
-              <tr>
-                  <th>Print Section</th>
-                  <td>{{ object.printSection }}</td>
-              </tr>
-              <tr>
-                  <th>Print Page(s)</th>
-                  <td>{{ object.printPage }}</td>
-              </tr>
-              <tr>
-                  <th>Print Column</th>
-                  <td>{{ object.printColumn }}</td>
-              </tr>
-          </tbody>
+        <tbody>
+            <tr>
+                <th>ID</th>
+                <td>{{ article.id }}</td>
+            </tr>
+            <tr>
+                <th>Column</th>
+                <td>{{ article.printColumn }}</td>
+            </tr>
+            <tr>
+                <th>Page</th>
+                <td>{{ article.printPage }}</td>
+            </tr>
+            <tr>
+                <th>Section</th>
+                <td>{{ article.printSection }}</td>
+            </tr>
+            <tr>
+                <th>Body</th>
+                <td>{{ article.articleBody|markdown }}</td>
+            </tr>
+            <tr>
+                <th>Headline</th>
+                <td>{{ article.headline }}</td>
+            </tr>
+            <tr>
+                <th>Alternative/Secondary Headline</th>
+                <td>{{ article.alternativeHeadline }}</td>
+            </tr>
+            <tr>
+                <th>Author Byline</th>
+                <td>{{ article.authorByline }}</td>
+            </tr>
+            <tr>
+                <th>Contributor Byline</th>
+                <td>{{ article.contributorByline }}</td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <td>{{ article.dateCreated ? article.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Published</th>
+                <td>{{ article.datePublished ? article.datePublished|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Modified</th>
+                <td>{{ article.dateModified ? article.dateModified|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Keywords</th>
+                <td>{{ article.keywords }}</td>
+            </tr>
+            <tr>
+                <th>Modified By</th>
+                <td>{{ article.modifiedBy }}</td>
+            </tr>
+            <tr>
+                <th>Legacy ID</th>
+                <td>{{ article.legacyId }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td><tt>{{ article.slug }}</tt></td>
+            </tr>
+        </tbody>
       </table>
     </div>
   </div>
 
-  {% if object.images.count %}
-  <div class="panel panel-default">
-    <div class="panel-heading">Images</div>
-    <div class="panel-body">
-      <ul>
-        {% for image in object.images %}
-        <li><a href="{{ path('admin_app_image_edit', {'id': image.id}) }}">{{ image.path }}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
-  {% endif %}
+  {{ include('admin/article/_delete_form.html.twig') }}
 </div>
 {% endblock %}

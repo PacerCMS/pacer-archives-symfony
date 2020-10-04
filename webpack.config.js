@@ -8,6 +8,10 @@ Encore
     // only needed for CDN's or sub-directory deploy
     //.setManifestKeyPrefix('build/')
 
+    .copyFiles({
+      from: './assets/images'
+    })
+
     /*
      * ENTRY CONFIG
      *
@@ -19,6 +23,8 @@ Encore
      */
     .addEntry('app', './assets/js/app.js')
     .addEntry('archive', './assets/js/archive.js')
+    .addEntry('admin', './assets/js/admin.js')
+
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app

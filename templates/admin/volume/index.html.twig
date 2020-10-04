@@ -1,0 +1,57 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Volumes - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="container">
+  {% embed 'admin/_page_header.html.twig' %}
+  {% block page_header_title %}Volumes{% endblock %}
+  {% block page_header_buttons %}
+  <a href="{{ path('volume_new') }}"><i class="fas fa-plus fa-fw"></i></a>
+  {% endblock %}
+  {% endembed %}
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table" id="volumeTable">
+          <thead>
+            <tr>
+                <th>Number</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Nameplate</th>
+                <th data-sortable="false" class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for volume in volumes %}
+            <tr>
+                <td><a href="{{ path('volume_show', {'id': volume.id}) }}">{{ volume.volumeNumber }}</a></td>
+                <td data-sort="{{ volume.volumeStartDate ? volume.volumeStartDate|date('Y-m-d') : '' }}">{{ volume.volumeStartDate ? volume.volumeStartDate|date('n/j/Y') : '' }}</td>
+                <td data-sort="{{ volume.volumeEndDate ? volume.volumeEndDate|date('Y-m-d') : '' }}">{{ volume.volumeEndDate ? volume.volumeEndDate|date('n/j/Y') : '' }}</td>
+                <td>{{ volume.nameplateKey }}</td>
+                <td>
+                    <a href="{{ path('volume_show', {'id': volume.id}) }}"><i class="fas fa-eye fa-fw"></i></a>
+                    <a href="{{ path('volume_edit', {'id': volume.id}) }}"><i class="fas fa-edit fa-fw"></i></a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block pagejs %}
+{{ parent() }}
+<script>
+$('#volumeTable').DataTable()
+</script>
+{% endblock %}

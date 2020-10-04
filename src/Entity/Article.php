@@ -9,6 +9,16 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ * @ORM\Table(indexes={
+ *   @ORM\Index(
+ *     columns={"article_body", "headline", "alternative_headline"},
+ *     flags={"fulltext"}
+ *   ),
+ *   @ORM\Index(
+ *     columns={"author_byline", "contributor_byline"},
+ *     flags={"fulltext"}
+ *   )
+ * })
  */
 class Article
 {

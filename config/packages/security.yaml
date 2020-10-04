@@ -38,4 +38,3 @@ security:
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY, host: ^staging.thepacer.org$ }
-        - { path: ^/admin, roles: ROLE_ADMIN }

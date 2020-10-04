@@ -2,13 +2,16 @@
 lock "~> 3.11.0"
 
 set :application, "ThePacerOrg"
-set :repo_url, "git@github.com:PacerCMS/pacer-archives-symfony.git"
+set :repo_url, "git@github.thepacer.org:thepacer/pacer-archives-symfony.git"
 
 # Use package.lock.json
 set :npm_method, 'ci'
 
 # Link local configuration
 set :linked_files, [".env.local"]
+
+# Adjust branch if environment variable provided
+set :branch, ENV['BRANCH'] if ENV['BRANCH']
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp

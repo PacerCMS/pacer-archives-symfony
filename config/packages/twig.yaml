@@ -1,8 +1,9 @@
 twig:
+    form_themes: ['bootstrap_4_layout.html.twig']
     default_path: '%kernel.project_dir%/templates'
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
-    form_themes: ['bootstrap_4_layout.html.twig']
+    exception_controller: ~
 
     globals:
       ga_tracking_id: '%env(resolve:GA_TRACKING_ID)%'

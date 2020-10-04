@@ -1,53 +1,41 @@
-{% extends base_template %}
+{% extends 'base_admin.html.twig' %}
 
-{% block title %}
-    {{ "title_show"|trans({'%name%': admin.toString(object)|truncate(15) }, 'SonataAdminBundle') }}
-{% endblock %}
+{% block title %}Image: &quot;{{ image }}&quot; - {{ parent() }}{% endblock %}
 
-{% block navbar_title %}
-    {{ block('title') }}
-{% endblock %}
-
-{%- block actions -%}
-    {% include '@SonataAdmin/CRUD/action_buttons.html.twig' %}
-{%- endblock -%}
-
-{% block show %}
-<div class="panel panel-default">
-  <div class="panel-heading">Image</div>
-  <div class="panel-body">
-    <table class="table">
+{% block body %}
+<div class="container">
+  {% embed 'admin/_page_header.html.twig' %}
+  {% block page_header_title %}{{ image }}{% endblock %}
+  {% block page_header_buttons %}
+  <a href="{{ path('image_index') }}"><i class="fas fa-list fa-fw"></i></a>
+  <a href="{{ path('image_edit', {'id': image.id}) }}"><i class="fas fa-edit fa-fw"></i></a>
+  {% endblock %}
+  {% endembed %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <table class="table">
         <tbody>
             <tr>
                 <th>ID</th>
-                <td>{{ object.id }}</td>
+                <td>{{ image.id }}</td>
             </tr>
             <tr>
                 <th>Caption</th>
-                <td>{{ object.caption|markdown }}</td>
+                <td>{{ image.caption }}</td>
             </tr>
             <tr>
                 <th>Credit</th>
-                <td>{{ object.credit }}</td>
-            </tr>
-            <tr>
-                <th>Preview</th>
-                <td><img src="{{ path('s3_proxy', {id: object.id} ) }}"></td>
+                <td>{{ image.credit }}</td>
             </tr>
             <tr>
                 <th>Path</th>
-                <td>{{ object.path }}</td>
-            </tr>
-            <tr>
-                <th>Article</th>
-                {% if object.article %}
-                <td><a href="{{ path('admin_app_article_edit', {id: object.article.id} ) }}">{{ object.article }}</a></td>
-                {% else %}
-                <td class="text-muted">No paired article.</td>
-                {% endif %}
+                <td><tt>{{ image.path }}</tt></td>
             </tr>
         </tbody>
-    </table>
+      </table>
+    </div>
   </div>
+
+  {{ include('admin/image/_delete_form.html.twig') }}
 </div>
 {% endblock %}

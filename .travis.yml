@@ -1,6 +1,9 @@
 language: generic
 dist: xenial
-sudo: false
+os: linux
+
+notifications:
+  email: false
 
 cache:
   directories:
@@ -18,8 +21,10 @@ matrix:
   include:
     - php: 7.1
     - php: 7.2
+    - php: 7.3
 
 before_install:
+  - nvm use stable
   - composer self-update
 
 install:

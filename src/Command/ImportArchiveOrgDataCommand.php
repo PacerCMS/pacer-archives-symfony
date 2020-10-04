@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\HttpClient\HttpClient;
 
 use App\Entity\Issue;
 use App\Entity\Volume;
@@ -31,7 +32,7 @@ class ImportArchiveOrgDataCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -47,7 +48,7 @@ class ImportArchiveOrgDataCommand extends Command
                 $volume->setVolumeStartDate(new \DateTime("$start_year-08-01"));
                 $volume->setVolumeEndDate(new \DateTime("$end_year-07-31"));
                 $volume->setNameplateKey('volette');
-                if ($volume->getVolumeNumber() >= 54) {
+                if ($volume->getVolumeNumber() >= 44) {
                     $volume->setNameplateKey('pacer');
                 }
                 $this->entityManager->persist($volume);
@@ -67,7 +68,8 @@ class ImportArchiveOrgDataCommand extends Command
                 'volume',
                 'issue',
                 'pages',
-                'notes'
+                'notes',
+                'utmdigitalarchive'
             ],
             'sort' => [
                 'date asc'
@@ -77,10 +79,10 @@ class ImportArchiveOrgDataCommand extends Command
             'output' => 'json'
         ]);
 
-        $client = new \GuzzleHttp\Client();
+        $client = HttpClient::create();
         $result = $client->request('GET', $url);
 
-        $json = json_decode($result->getBody());
+        $json = json_decode($result->getContent());
 
         foreach ($json->response->docs as $doc) {
             // Find existing volume
@@ -113,11 +115,15 @@ class ImportArchiveOrgDataCommand extends Command
             $issue->setArchiveKey($doc->identifier);
             $issue->setPageCount(isset($doc->pages) ? $doc->pages : 0);
             $issue->setArchiveNotes(isset($doc->notes) ? $doc->notes : '');
+            if (property_exists($doc, 'utmdigitalarchive')) {
+                $issue->setUtmDigitalArchiveUrl($doc->utmdigitalarchive);
+            }
             $this->entityManager->persist($issue);
         }
 
         $this->entityManager->flush();
 
         $io->success('Done!');
+        return 0;
     }
 }

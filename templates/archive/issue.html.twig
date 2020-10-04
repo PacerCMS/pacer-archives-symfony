@@ -12,12 +12,15 @@
     </ol>
   </nav>
 
-  <div class="row mb-4">
-    <div class="col-md-8 text-center text-md-left">
-      <h2 class="mb-4">{{ issue.issueDate | date('F j, Y') }}</h2>
+  <div class="d-flex flex-wrap mb-3">
+    <div class="mr-auto text-center text-md-left">
+      <h2 class="mb-4 mb-1">{{ issue.issueDate | date('F j, Y') }}</h2>
     </div>
-    <div class="col-md-4 text-center text-md-right">
-      <a href="https://archive.org/details/{{ issue.archiveKey }}" target="_blank" class="btn btn-primary"><i class="fas fa-search-plus mr-1"></i> Read Issue on Archive.org</a>
+    <div class="text-center text-md-right">
+      {% if issue.utmDigitalArchiveUrl %}
+      <a href="{{ issue.utmDigitalArchiveUrl }}" target="_blank" class="btn btn-primary mb-1"><i class="fas fa-archive fa-fw mr-1"></i> UTM Digital Archive</a>
+      {% endif %}
+      <a href="https://archive.org/details/{{ issue.archiveKey }}" target="_blank" class="btn btn-primary mb-1"><i class="fas fa-search-plus fa-fw mr-1"></i> Read Issue on Archive.org</a>
     </div>
   </div>
 
@@ -77,13 +80,5 @@
   </div>
   {% endif %}
 </div>
-
-{% if is_granted('ROLE_ADMIN') %}
-<div class="fixed-top">
-  <div class="float-right p-1">
-    <a href="{{ path('admin_app_issue_edit', {id: issue.id}) }}" class="btn btn-secondary btn-sm"><i class="fas fa-pencil-alt"></i> Edit</a>
-  </div>
-</div>
-{% endif %}
 
 {% endblock %}

@@ -1,17 +1,13 @@
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
 /.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
+/src/.preload.php
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-###> symfony/web-server-bundle ###
-/.web-server-pid
-###< symfony/web-server-bundle ###
-
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
@@ -22,4 +18,5 @@ yarn-error.log
 ###> symfony/phpunit-bridge ###
 .phpunit
 /phpunit.xml
+.phpunit.result.cache
 ###< symfony/phpunit-bridge ###

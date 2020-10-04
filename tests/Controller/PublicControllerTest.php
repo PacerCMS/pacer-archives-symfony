@@ -31,6 +31,6 @@ class PublicControllerTest extends WebTestCase
     {
         $client = static::createClient();
         $client->request('GET', '/donate');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode());
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
     }
 }

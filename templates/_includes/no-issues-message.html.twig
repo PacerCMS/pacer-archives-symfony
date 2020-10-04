@@ -1,3 +1,11 @@
-<p class="lead">We are working to complete the print archives. Most issues of <em>The Volette</em> and <em>The Pacer</em> up through 2000 are stored on microfilm at the UT Martin Paul Meek Library. The remaining copies are in printed form and will need to be scanned.</p>
-<p class="lead">Review our <a href="{{ path('missing_issues') }}">list of missing issues</a> for any that we were unable to locate on microfilm.</p>
-<p class="lead">If you have any issues of the newspaper not found on this website that you would like to donate to the cause, contact us at <a href="mailto:archives@thepacer.org">archives@thepacer.org</a>.</p>
+<div class="row">
+  <div class="col-md-4 d-none d-md-block">
+    <img src="{{ asset('build/missing-issue.svg') }}" class="img-responsive" alt="No issues available yet." />
+  </div>
+  <div class="col-md-8">
+    <h2 class="my-4">There are no issues archived yet for this {{ unit }}.</h2>
+    <p class="lead">We are working to complete the digitization of the print archive to a digital format. Most issues of <em>The Volette</em> and <em>The Pacer</em> up through 2000 are stored on microfilm at the UT Martin Paul Meek Library. The remaining copies are in their original newsprint and will need to be scanned.</p>
+    <p class="lead">Review our <a href="{{ path('missing_issues') }}">list of missing issues</a> for any that we have been unable to locate on microfilm.</p>
+    <p class="lead">If you have any issues of the newspaper not found on this website that you would like to donate to the cause, contact us at <a href="mailto:archives@thepacer.org">archives@thepacer.org</a>.</p>
+  </div>
+</div>

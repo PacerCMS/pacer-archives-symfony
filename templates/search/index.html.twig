@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+{% form_theme searchForm 'bootstrap_4_horizontal_layout.html.twig' %}
+
+{% block title %}Search - {{ parent() }}{% endblock %}
+
+{% block body %}
+
+<div class="container mt-3">
+  <div class="card mb-3">
+    <div class="card-header">Search</div>
+    <div class="card-body">
+      {{ form_start(searchForm) }}
+      <div class="form-group">{{ form_widget(searchForm.s, {attr: { placeholder: 'Enter search text ...'}} ) }}</div>
+      <div class="d-flex mb-2">
+        <div class="p-2"><i class="fas fa-info-circle"></i></div>
+        <div class="p-2 flex-fill text-muted">This form will search articles that are available on this website from 2002 to 2006. To search the contents of older issues, use the <a href="https://archive.org/details/thepacer" target="_blank">search form on the Internet Archive site</a> and select "text contents".</div>
+      </div>
+      <ul class="list-inline">
+        <li class="list-inline-item"><strong>Find in:</strong></li>
+        {% for index in searchForm.index %}
+          <li class="list-inline-item">{{ form_widget(index) }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="card-footer text-right">
+      <input type="submit" class="btn btn-primary" value="Search" />
+    </div>
+  </div>
+  {{ form_rest(searchForm) }}
+  {{ form_end(searchForm) }}
+
+  {% if pagination and pagination.getTotalItemCount > 0 %}
+
+  <div class="row">
+    <div class="col-md-8">
+      {% for row in pagination %}
+      {% set article = row[0] %}
+      <div class="card mb-1">
+        <div class="card-body">
+          <h4 class="mb-1"><a href="{{ path('article', { id: article.id, slug: article.slug } )}}">{{ article.headline }}</a></h4>
+          <p class="text-muted">{{ article.datePublished|date('F j, Y') }} | {{ article.authorByline }}</p>
+          <p class="mb-0">{{ article.articleBody|striptags|truncate(80, '...') }}</p>
+        </div>
+      </div>
+      {% else %}
+      <p class="alert alert-info">No results matched your query.</p>
+      {% endfor %}
+      <div class="navigation">
+        {{ knp_pagination_render(pagination) }}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-3"><span class="h2">{{ pagination.getTotalItemCount }}</span> results</div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item{% if pagination.isSorted('a.datePublished') %} sorted{% endif %}">
+          {{ knp_pagination_sortable(pagination, 'Date Published', 'a.datePublished') }}
+        </li>
+        <li class="list-group-item{% if pagination.isSorted('score') %}  sorted{% endif %}">
+          {{ knp_pagination_sortable(pagination, 'Relevancy', 'score') }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  
+
+  {% endif %}
+</div>
+
+{% endblock %}

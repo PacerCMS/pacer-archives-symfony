@@ -2,10 +2,13 @@
 
 namespace App\Form;
 
-use App\Entity\Volume;
 use App\Entity\Issue;
+use App\Entity\Volume;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -13,21 +16,18 @@ class VolumeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $entity = $builder->getData();
         $builder
             ->add('volumeNumber', null, [
-                'label' => 'Volume Number'
+                'label' => 'Volume'
             ])
-            ->add('volumeStartDate', null, [
+            ->add('volumeStartDate', DateType::class, [
                 'label' => 'Start Date',
-                'years' => range(1928, date('Y') + 5),
-                'months' => [8],
-                'days' => [1]
+                'widget' => 'single_text'
             ])
-            ->add('volumeEndDate', null, [
+            ->add('volumeEndDate', DateType::class, [
                 'label' => 'End Date',
-                'years' => range(1928, date('Y') + 5),
-                'months' => [7],
-                'days' => [31]
+                'widget' => 'single_text'
             ])
             ->add('nameplateKey', ChoiceType::class, [
                 'label' => 'Nameplate',
@@ -35,8 +35,22 @@ class VolumeType extends AbstractType
                     'The Pacer' => 'pacer',
                     'The Volette' => 'volette'
                 ]
-            ])
-        ;
+            ]);
+        if ($entity->getId()) {
+            $builder
+                ->add('coverIssue', EntityType::class, [
+                    'label' => 'Cover Issue',
+                    'class' => Issue::class,
+                    'query_builder' => function (EntityRepository $er) use ($entity) {
+                        return $er->createQueryBuilder('i')
+                            ->where('i.volume = :volume')
+                            ->setParameter('volume', $entity)
+                            ->orderBy('i.issueDate', 'ASC');
+                    },
+                    'required' => false
+                ])
+            ;
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

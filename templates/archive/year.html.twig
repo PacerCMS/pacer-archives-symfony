@@ -16,12 +16,17 @@
     </ol>
   </nav>
 
-  <div class="row mb-4">
-    <div class="col-md-8 text-center text-md-left">
-      <h2 class=mb-4>Issues Published in {{ year }}</h2>
+  <div class="d-flex flex-wrap mb-3">
+    <div class="mr-auto text-center text-md-left">
+      <h2 class="mb-4">Issues Published in {{ year }}</h2>
     </div>
-    <div class="col-md-4 text-center text-md-right">
-      <a href="https://archive.org/details/thepacer?and[]=year:{{ year }}&sort=date" target="_blank" class="btn btn-primary"><i class="fas fa-newspaper mr-1"></i> Browse Year on Archive.org</a>
+    <div class="text-center text-md-right">
+      {% if hasUTMDigitalArchives %}
+        <a href="https://cdm17288.contentdm.oclc.org/digital/collection/p17288coll4/search/searchterm/{{ year}}/field/year/mode/exact/conn/and/order/date/ad/asc" target="_blank" class="btn btn-primary mb-1"><i class="fas fa-archive fa-fw mr-1"></i> UTM Digital Archives</a>
+      {% endif %}
+      {% if issues|length > 0 %}
+        <a href="https://archive.org/details/thepacer?and[]=year:{{ year }}&sort=date" target="_blank" class="btn btn-primary mb-1"><i class="fas fa-newspaper fa-fw mr-1"></i> Browse Year on Archive.org</a>
+      {% endif %}
     </div>
   </div>
 
@@ -79,8 +84,7 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
-        <h3>There are no issues archived yet for this year.</h3>
-        {% include '_includes/no-issues-message.html.twig' %}
+        {% include '_includes/no-issues-message.html.twig' with {unit: 'year'} %}
       </div>
     </div>
   </div>
