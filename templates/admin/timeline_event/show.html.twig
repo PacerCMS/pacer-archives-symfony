@@ -1,0 +1,86 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}Timeline Event {{ timeline_event }} - {{ parent() }}{% endblock %}
+
+
+{% block body %}
+<div class="container">
+  {% embed 'admin/_page_header.html.twig' %}
+  {% block page_header_title %}{{ timeline_event }}{% endblock %}
+  {% block page_header_buttons %}
+  <a href="{{ path('timeline_event_index') }}"><i class="fas fa-list fa-fw"></i></a>
+  <a href="{{ path('timeline_event_edit', {'id': timeline_event.id}) }}"><i class="fas fa-edit fa-fw"></i></a>
+  {% endblock %}
+  {% endembed %}
+  <div class="card mb-3">
+    <div class="card-body">
+      <table class="table">
+        <tbody>
+          <tr>
+              <th>ID</th>
+              <td>{{ timeline_event.id }}</td>
+          </tr>
+          <tr>
+              <th>Start Date</th>
+              <td>{{ timeline_event.startDate ? timeline_event.startDate|date('Y-m-d H:i:s') : '' }}</td>
+          </tr>
+          <tr>
+              <th>Start Date Precision</th>
+              <td>{{ timeline_event.startDatePrecision }}</td>
+          </tr>
+          <tr>
+              <th>End Date</th>
+              <td>{{ timeline_event.endDate ? timeline_event.endDate|date('Y-m-d H:i:s') : '' }}</td>
+          </tr>
+          <tr>
+              <th>End Date Precision</th>
+              <td>{{ timeline_event.endDatePrecision }}</td>
+          </tr>
+          <tr>
+              <th>Display Date</th>
+              <td>{{ timeline_event.displayDate }}</td>
+          </tr>
+          <tr>
+              <th>Headline</th>
+              <td>{{ timeline_event.headline }}</td>
+          </tr>
+          <tr>
+              <th>Text</th>
+              <td>{{ timeline_event.text }}</td>
+          </tr>
+          <tr>
+              <th>Media</th>
+              <td>{{ timeline_event.media }}</td>
+          </tr>
+          <tr>
+              <th>Media Credit</th>
+              <td>{{ timeline_event.mediaCredit }}</td>
+          </tr>
+          <tr>
+              <th>Media Caption</th>
+              <td>{{ timeline_event.mediaCaption }}</td>
+          </tr>
+          <tr>
+              <th>Media Thumbnail</th>
+              <td>{{ timeline_event.mediaThumbnail }}</td>
+          </tr>
+          <tr>
+              <th>Type</th>
+              <td>{{ timeline_event.type }}</td>
+          </tr>
+          <tr>
+              <th>Event Group</th>
+              <td>{{ timeline_event.eventGroup }}</td>
+          </tr>
+          <tr>
+              <th>Background</th>
+              <td>{{ timeline_event.background }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {{ include('admin/timeline_event/_delete_form.html.twig') }}
+</div>
+{% endblock %}

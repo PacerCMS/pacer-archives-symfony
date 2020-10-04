@@ -9,6 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TimelineEvent
 {
+    public const DATE_PRECISIONS = [
+        'Day' => 'day',
+        'Month' => 'month',
+        'Year' => 'year'
+    ];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -110,6 +116,10 @@ class TimelineEvent
 
     public function setStartDatePrecision(string $startDatePrecision): self
     {
+        if (!in_array($startDatePrecision, array_values(self::DATE_PRECISIONS))) {
+            throw new \InvalidArgumentException('Invalid date precision.');
+        }
+
         $this->startDatePrecision = $startDatePrecision;
 
         return $this;
@@ -134,6 +144,10 @@ class TimelineEvent
 
     public function setEndDatePrecision(?string $endDatePrecision): self
     {
+        if (!in_array($endDatePrecision, array_values(self::DATE_PRECISIONS))) {
+            throw new \InvalidArgumentException('Invalid date precision.');
+        }
+
         $this->endDatePrecision = $endDatePrecision;
 
         return $this;
@@ -262,6 +276,11 @@ class TimelineEvent
     /**
      * Model Methods
      */
+
+     public function __toString(): string
+     {
+         return $this->headline;
+     }
 
     public function getAsTimelineEventArray(): array
     {

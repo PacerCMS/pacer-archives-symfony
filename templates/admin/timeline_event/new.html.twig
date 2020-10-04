@@ -1,0 +1,16 @@
+{% extends 'base_admin.html.twig' %}
+
+{% block title %}New Timeline Event - {{ parent() }}{% endblock %}
+
+{% block body %}
+<div class="container">
+  {% embed 'admin/_page_header.html.twig' %}
+  {% block page_header_title %}New Timeline Event{% endblock %}
+  {% block page_header_buttons %}
+  <a href="{{ path('timeline_event_index') }}"><i class="fas fa-list fa-fw"></i></a>
+  {% endblock %}
+  {% endembed %}
+
+  {{ include('admin/timeline_event/_form.html.twig') }}
+</div>
+{% endblock %}

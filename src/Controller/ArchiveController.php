@@ -143,7 +143,7 @@ class ArchiveController extends AbstractController
     /**
      * @Route("/timeline-data-source", name="timeline_data_source")
      */
-    public function timelineDataSource(Request $request)
+    public function timelineDataSource(Request $request, IssueRepository $issueRepository)
     {
         $startDate = new \DateTime($request->get('start_date', date('Y-m-d', strtotime('January 1, 1928'))));
         $endDate = new \DateTime($request->get('end_date', date('Y-m-d')));
@@ -152,7 +152,6 @@ class ArchiveController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
 
         // Newspaper Issues
-        $issueRepository = $entityManager->getRepository(Issue::class);
         $issues = $issueRepository->findBetween($startDate, $endDate);
         foreach ($issues as $issue) {
             $output[] = $issue->getAsTimelineEventArray($this->generateUrl('issue', [
