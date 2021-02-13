@@ -109,7 +109,7 @@ class ArchiveController extends AbstractController
      * @Route("/issue/{issueDate}", name="issue", requirements={"issueDate"="([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])"})
      * @Route("/issue-{issueDate}", requirements={"issueDate"="([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])"})
      */
-    public function issue(IssueRepository $issueRepository, string $issueDate)
+    public function issue(IssueRepository $issueRepository, ArticleRepository $articleRepository, string $issueDate)
     {
         $issue = $issueRepository->findOneBy(['issueDate' => new \DateTime($issueDate)]);
 
@@ -122,6 +122,8 @@ class ArchiveController extends AbstractController
 
         return $this->render('archive/issue.html.twig', [
             'issue' => $issue,
+            'articlesInPrint' => $articleRepository->getIssueArticlesInPrint(new \DateTime($issueDate)),
+            'articlesOnlineOnly' => $articleRepository->getIssueArticlesOnlineOnly(new \DateTime($issueDate)),
             'previousIssue' => $previousIssue,
             'nextIssue' => $nextIssue,
             'opengraph' => [

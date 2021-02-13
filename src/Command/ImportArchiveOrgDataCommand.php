@@ -18,6 +18,8 @@ class ImportArchiveOrgDataCommand extends Command
 {
     protected static $defaultName = 'app:import-archive-org-data';
 
+    protected $entityManager;
+
     public function __construct(EntityManagerInterface $entityManager)
     {
         parent::__construct();
@@ -44,7 +46,7 @@ class ImportArchiveOrgDataCommand extends Command
                 $end_year = $start_year + 1;
 
                 $volume = new Volume();
-                $volume->setVolumeNumber($v + 1);
+                $volume->setVolumeNumber((string) ($v + 1));
                 $volume->setVolumeStartDate(new \DateTime("$start_year-08-01"));
                 $volume->setVolumeEndDate(new \DateTime("$end_year-07-31"));
                 $volume->setNameplateKey('volette');

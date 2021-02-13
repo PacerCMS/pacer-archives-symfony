@@ -1,9 +1,26 @@
 {{ form_start(form) }}
-<div class="card mb-3">
-  <div class="card-body">
-    {{ form_widget(form) }}
-    {{ form_rest(form) }}
+<div class="row">
+  <div class="col-md-4">
+    <div class="card mb-3">
+      <div class="card-body">
+        {{ form_row(form.volume) }}
+        {{ form_row(form.issueDate, {label: 'Issue Date'}) }}
+        {{ form_row(form.issueNumber, {label: 'Issue Number'}) }}
+        <hr />
+        {{ form_row(form.pageCount, {label: 'Page Count'}) }}
+        {{ form_row(form.archiveKey, {label: 'Archive Key', attr: {style: 'font-family: monospace'}}) }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card mb-3">
+      <div class="card-body">
+        {{ form_row(form.archiveNotes, {label: 'Notes', attr: {rows: 10}}) }}
+        {{ form_row(form.utmDigitalArchiveUrl, {label: 'UTM Digital Archive URL'}) }}
+      </div>
+    </div>
   </div>
 </div>
+{{ form_rest(form) }}
 <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

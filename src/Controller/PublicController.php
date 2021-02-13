@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Contracts\Cache\ItemInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 use App\Repository\IssueRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\HttpClient\Exception\ServerException;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class PublicController extends AbstractController
 {
@@ -28,11 +28,16 @@ class PublicController extends AbstractController
             $cache->delete('public.issue_count');
         }
 
-        $feed = $cache->get('public.pacer_site_feed', function (ItemInterface $item) {
+        $feed = $cache->get('public.pacer_site_feed', function (ItemInterface $item) use ($cache) {
             $item->expiresAfter(self::CACHE_TTL);
             $client = HttpClient::create();
-            $response = $client->request('GET', 'http://www.thepacer.net/wp-json/wp/v2/posts?_embed&per_page=5');
-            return json_decode($response->getContent());
+            try {
+                $response = $client->request('GET', 'http://www.thepacer.net/wp-json/wp/v2/posts?_embed&per_page=5');
+                return json_decode($response->getContent());
+            } catch (ServerException $e) {
+                $cache->delete('public.pacer_site_feed');
+                return false;
+            }
         });
         $issue_count = $cache->get('public.issue_count', function (ItemInterface $item) use ($issueRepository) {
             $item->expiresAfter(self::CACHE_TTL);

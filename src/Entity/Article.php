@@ -62,12 +62,12 @@ class Article
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $author_byline;
+    private $authorByline;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $contributor_byline;
+    private $contributorByline;
 
     /**
      * @ORM\Column(type="datetime")
@@ -181,7 +181,7 @@ class Article
         return $this->headline;
     }
 
-    public function setHeadline(string $headline): self
+    public function setHeadline(?string $headline): self
     {
         $this->headline = $headline;
 
@@ -193,7 +193,7 @@ class Article
         return $this->alternativeHeadline;
     }
 
-    public function setAlternativeHeadline(string $alternativeHeadline): self
+    public function setAlternativeHeadline(?string $alternativeHeadline): self
     {
         $this->alternativeHeadline = $alternativeHeadline;
 
@@ -202,24 +202,24 @@ class Article
 
     public function getAuthorByline(): ?string
     {
-        return $this->author_byline;
+        return $this->authorByline;
     }
 
-    public function setAuthorByline(string $author_byline): self
+    public function setAuthorByline(?string $authorByline): self
     {
-        $this->author_byline = $author_byline;
+        $this->authorByline = $authorByline;
 
         return $this;
     }
 
     public function getContributorByline(): ?string
     {
-        return $this->contributor_byline;
+        return $this->contributorByline;
     }
 
-    public function setContributorByline(string $contributor_byline): self
+    public function setContributorByline(?string $contributorByline): self
     {
-        $this->contributor_byline = $contributor_byline;
+        $this->contributorByline = $contributorByline;
 
         return $this;
     }

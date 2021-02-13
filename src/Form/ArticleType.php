@@ -16,14 +16,12 @@ class ArticleType extends AbstractType
             ->add('headline')
             ->add('alternativeHeadline')
             ->add('articleBody')
-            ->add('author_byline')
-            ->add('contributor_byline')
+            ->add('authorByline')
+            ->add('contributorByline')
             ->add('datePublished', DateType::class, [
                 'widget' => 'single_text'
             ])
             ->add('keywords')
-            ->add('modifiedBy')
-            ->add('legacyId')
             ->add('slug')
             ->add('issue')
             ->add('printColumn')

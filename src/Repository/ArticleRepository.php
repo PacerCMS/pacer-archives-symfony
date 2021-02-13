@@ -40,4 +40,32 @@ class ArticleRepository extends ServiceEntityRepository
             ->getQuery()
         ;
     }
+
+    public function getIssueArticlesInPrint(\DateTime $issueDate)
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.issue', 'i')
+            ->where('i.issueDate = :issueDate')
+            ->andWhere('a.printPage > 0')
+            ->setParameter('issueDate', $issueDate)
+            ->orderBy('a.printPage', 'ASC')
+            ->addOrderBy('a.printColumn', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function getIssueArticlesOnlineOnly(\DateTime $issueDate)
+    {
+        return $this->createQueryBuilder('a')
+            ->join('a.issue', 'i')
+            ->where('i.issueDate = :issueDate')
+            ->andWhere('a.printPage IS NULL')
+            ->setParameter('issueDate', $issueDate)
+            ->orderBy('a.printSection', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 }

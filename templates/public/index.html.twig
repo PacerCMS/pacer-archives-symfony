@@ -74,6 +74,11 @@
                 <a href="{{ item.link }}" target="_blank">{{ item.title.rendered | raw }}</a><br />
                 <span class="text-muted small">{{ item._embedded.author | first.name }} / {{ item.date | date('F j, Y') }}</span>
               </li>
+            {% else %}
+            <div class="d-flex">
+              <div class="p-2"><i class="fas fa-exclamation-triangle fa-2x text-danger"></i></div>
+              <div class="p-2">Unable to load content from the website.</div>
+            </div>
             {% endfor %}
           </ul>
         </div>

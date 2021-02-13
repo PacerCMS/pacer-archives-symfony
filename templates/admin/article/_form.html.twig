@@ -1,9 +1,45 @@
 {{ form_start(form) }}
-<div class="card mb-3">
-  <div class="card-body">
-    {{ form_widget(form) }}
-    {{ form_rest(form) }}
+<div class="row">
+  <div class="col-md-8">  
+    <div class="card mb-3">
+      <div class="card-body">
+        {{ form_row(form.headline, {attr: {class: 'form-control-lg'}}) }}
+        {{ form_row(form.alternativeHeadline, {label: 'Alternative/Sub Headline'}) }}
+        <div class="row">
+          <div class="col-md-6">
+            {{ form_row(form.authorByline, {label: 'Author(s) Byline'}) }}
+          </div>
+          <div class="col-md-6">
+            {{ form_row(form.contributorByline, {label: 'Contributor(s) Byline'}) }}
+          </div>
+        </div>
+        <hr />
+        {{ form_row(form.articleBody, {label: 'Article Body', attr: { rows: 25}}) }}
+        <hr />
+        {{ form_row(form.keywords) }}
+        {{ form_row(form.slug, {attr: {style: 'font-family: monospace'}}) }}
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">  
+    <div class="card mb-3">
+      <div class="card-body">
+        {{ form_row(form.issue) }}
+        {{ form_row(form.datePublished, {label: 'Date Published'}) }}
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-header">
+        Print Appearance
+      </div>
+      <div class="card-body">
+        {{ form_row(form.printPage, {label: 'Page', help: 'Page number where article begins.'}) }}
+        {{ form_row(form.printColumn, {label: 'Column', help: 'From left to right, the column where article begins.'}) }}
+        {{ form_row(form.printSection, {label: 'Section', help: 'Name of the section heading for this article, or "Cover" if appearing on the front page.'}) }}
+      </div>
+    </div>
   </div>
 </div>
+{{ form_rest(form) }}
 <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

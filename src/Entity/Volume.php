@@ -147,6 +147,20 @@ class Volume
 
     /* model methods */
 
+    public function getNamePlateDisplay(): string
+    {
+        switch($this->nameplateKey) {
+            case 'pacer':
+                return 'The Pacer';
+                break;
+            case 'volette':
+                return 'The Volette';
+                break;
+            default:
+                return 'Unknown';
+        }
+    }
+
     public function __toString()
     {
         return sprintf(

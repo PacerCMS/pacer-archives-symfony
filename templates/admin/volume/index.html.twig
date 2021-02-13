@@ -30,7 +30,7 @@
                 <td><a href="{{ path('volume_show', {'id': volume.id}) }}">{{ volume.volumeNumber }}</a></td>
                 <td data-sort="{{ volume.volumeStartDate ? volume.volumeStartDate|date('Y-m-d') : '' }}">{{ volume.volumeStartDate ? volume.volumeStartDate|date('n/j/Y') : '' }}</td>
                 <td data-sort="{{ volume.volumeEndDate ? volume.volumeEndDate|date('Y-m-d') : '' }}">{{ volume.volumeEndDate ? volume.volumeEndDate|date('n/j/Y') : '' }}</td>
-                <td>{{ volume.nameplateKey }}</td>
+                <td>{{ volume.nameplateDisplay }}</td>
                 <td>
                     <a href="{{ path('volume_show', {'id': volume.id}) }}"><i class="fas fa-eye fa-fw"></i></a>
                     <a href="{{ path('volume_edit', {'id': volume.id}) }}"><i class="fas fa-edit fa-fw"></i></a>

@@ -71,6 +71,9 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            if ($request->query->get('return') == 'public') {
+                return $this->redirectToRoute('article', ['id' => $article->getId(), 'slug' => $article->getSlug()]);
+            }
             return $this->redirectToRoute('article_index');
         }
 

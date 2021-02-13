@@ -12,76 +12,50 @@
   {% endblock %}
   {% endembed %}
 
-  <div class="card mb-3">
-    <div class="card-body">
-      <table class="table">
-        <tbody>
-            <tr>
-                <th>ID</th>
-                <td>{{ article.id }}</td>
-            </tr>
-            <tr>
-                <th>Column</th>
-                <td>{{ article.printColumn }}</td>
-            </tr>
-            <tr>
-                <th>Page</th>
-                <td>{{ article.printPage }}</td>
-            </tr>
-            <tr>
-                <th>Section</th>
-                <td>{{ article.printSection }}</td>
-            </tr>
-            <tr>
-                <th>Body</th>
-                <td>{{ article.articleBody|markdown }}</td>
-            </tr>
-            <tr>
-                <th>Headline</th>
-                <td>{{ article.headline }}</td>
-            </tr>
-            <tr>
-                <th>Alternative/Secondary Headline</th>
-                <td>{{ article.alternativeHeadline }}</td>
-            </tr>
-            <tr>
-                <th>Author Byline</th>
-                <td>{{ article.authorByline }}</td>
-            </tr>
-            <tr>
-                <th>Contributor Byline</th>
-                <td>{{ article.contributorByline }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{{ article.dateCreated ? article.dateCreated|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Published</th>
-                <td>{{ article.datePublished ? article.datePublished|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Modified</th>
-                <td>{{ article.dateModified ? article.dateModified|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Keywords</th>
-                <td>{{ article.keywords }}</td>
-            </tr>
-            <tr>
-                <th>Modified By</th>
-                <td>{{ article.modifiedBy }}</td>
-            </tr>
-            <tr>
-                <th>Legacy ID</th>
-                <td>{{ article.legacyId }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td><tt>{{ article.slug }}</tt></td>
-            </tr>
-        </tbody>
-      </table>
+  <div class="row">
+    <div class="col-md-8">  
+      <div class="card mb-3">
+        <div class="card-body">
+          <p><a href="{{ path('article', {slug: article.slug, id: article.id}) }}" class="btn btn-primary"><i class="fas fa-newspaper fa-fw"></i> Open {{ article }}</a></p>
+          <h1>
+            {{ article.headline }}
+            {% if article.alternativeHeadline %}<br /><small class="text-italics">{{ article.alternativeHeadline }}</small>{% endif %}
+          </h1>
+          <p><cite>{{ article.authorByline }}</cite></p>
+          <p><cite>{{ article.contributorByline }}</cite></p>
+          <hr />
+          {{ article.articleBody|markdown }}
+          <hr />
+          <p>
+            <strong>Keywords:</strong> {{ article.keywords }}<br />
+            <strong>Slug:</strong> <tt>{{ article.slug }}</tt>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">  
+      <div class="card mb-3">
+        <div class="card-body">
+          <p>
+            {% if article.issue %}
+            <strong>Issue:</strong> <a href="{{ path('issue_show', {id: article.issue.id}) }}">{{ article.issue }}</a><br />
+            {% else %}
+            <strong>Issue:</strong> Not set.<br />
+            {% endif %}
+            <strong>Date Published:</strong> {{ article.datePublished|date('n/j/Y') }}
+          </p>
+        </div>
+      </div>
+      <div class="card mb-3">
+        <div class="card-header">
+          Print Appearance
+        </div>
+        <div class="card-body">
+          <strong>Page:</strong> {{ article.printPage|default('Not set.') }}<br />
+          <strong>Column:</strong> {{ article.printColumn|default('Not set.') }}<br />
+          <strong>Section:</strong> {{ article.printSection|default('Not set.') }}<br />
+        </div>
+      </div>
     </div>
   </div>
 

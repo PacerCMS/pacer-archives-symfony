@@ -43,8 +43,10 @@ pipeline {
     }
     stage('Deploy to Staging') {
       when {
-        not {
-          branch 'master'
+        expression {
+          isMaster = env.BRANCH_NAME == "master"
+          isPrBranch = env.BRANCH_NAME ==~ /PR\-[0-9]+/
+          return !isMaster && !isPrBranch
         }
       }
       steps {

@@ -21,8 +21,6 @@
                 <th>Number</th>
                 <th>Pages</th>
                 <th>Archive Key</th>
-                <th>Notes</th>
-                <th>UT Martin Digital Archive</th>
                 <th data-sortable="false" class="col-actions"></th>
             </tr>
           </thead>
@@ -32,9 +30,7 @@
                 <td data-sort="{{ issue.issueDate ? issue.issueDate|date('Y-m-d') : '' }}">{{ issue.issueDate ? issue.issueDate|date('n/j/Y') : '' }}</td>
                 <td>{{ issue.issueNumber }}</td>
                 <td>{{ issue.pageCount }}</td>
-                <td>{{ issue.archiveKey }}</td>
-                <td>{{ issue.archiveNotes }}</td>
-                <td>{{ issue.utmDigitalArchiveUrl }}</td>
+                <td><tt>{{ issue.archiveKey }}</tt></td>
                 <td>
                     <a href="{{ path('issue_show', {'id': issue.id}) }}"><i class="fas fa-eye fa-fw"></i></a>
                     <a href="{{ path('issue_edit', {'id': issue.id}) }}"><i class="fas fa-edit fa-fw"></i></a>

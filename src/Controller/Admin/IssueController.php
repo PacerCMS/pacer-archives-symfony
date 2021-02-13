@@ -71,6 +71,9 @@ class IssueController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            if ($request->query->get('return') == 'public') {
+                return $this->redirectToRoute('issue', ['issueDate' => $issue->getIssueDate()->format('Y-m-d')]);
+            }
             return $this->redirectToRoute('issue_index');
         }
 

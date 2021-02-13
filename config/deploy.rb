@@ -13,6 +13,8 @@ set :linked_files, [".env.local"]
 # Adjust branch if environment variable provided
 set :branch, ENV['BRANCH'] if ENV['BRANCH']
 
+set :file_permissions_users, ['www-data']
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 

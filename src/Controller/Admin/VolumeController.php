@@ -71,6 +71,9 @@ class VolumeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            if ($request->query->get('return') == 'public') {
+                return $this->redirectToRoute('volume', ['volumeNumber' => $volume->getVolumeNumber()]);
+            }
             return $this->redirectToRoute('volume_index');
         }
 

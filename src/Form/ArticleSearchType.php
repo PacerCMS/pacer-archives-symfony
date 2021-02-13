@@ -29,7 +29,6 @@ class ArticleSearchType extends AbstractType
                     'Article Content' => 'content',
                     'Author Bylines' => 'author'
                 ],
-                'data' => 'content',
                 'label' => 'Search Index',
                 'property_path' => 'index',
                 'expanded' => true,
